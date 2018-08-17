@@ -1,4 +1,5 @@
 from app import app
+from flask import jsonify, request, abort, make_response
 
 @app.route('/')
 def index():
@@ -25,14 +26,14 @@ tasks = [
 
 @app.route('/todo/api/v1.0/tasks', methods=['GET'])
 def get_tasks():
-    return jsonify({'tasks': tasks})
+    return jsonify(tasks)
 
 @app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
     task = [task for task in tasks if task['id'] == task_id]
     if len(task) == 0:
         abort(404)
-    return jsonify({'task': task[0]})
+    return jsonify(task[0])
 
 @app.route('/todo/api/v1.0/tasks', methods=['POST'])
 def create_task():
@@ -46,7 +47,7 @@ def create_task():
         'done': False
     }
     tasks.append(task)
-    return jsonify({'task': tasks}), 201
+    return jsonify(tasks), 201
 
 @app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
